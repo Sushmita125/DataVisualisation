@@ -7,4 +7,5 @@ The key findings were that highest hotel accommodations were in Dublin .
 The B&B accommodations were highest in the county Kerry and Hostel accommodations in Galway.
 The hostel have a capacity of 200 beds, the hotels have capacity of  400 beds followed by 20 for B&B which has least capacity.
  
+![image](https://user-images.githubusercontent.com/68917656/120112216-d5a63380-c16c-11eb-90bd-3b7facf65de5.png)
 
