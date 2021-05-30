@@ -1,0 +1,156 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "title": {
+    "text": "Exploring Irish Accommodations",
+    "fontSize": 24,
+    "anchor": "middle"
+  },
+  "vconcat": [
+    {
+      "hconcat": [
+        {
+          "layer": [
+            {
+              "width": 500,
+              "height": 600,
+              "data": {
+                "url": "https://gist.githubusercontent.com/carsonfarmer/9791524/raw/b27ca0d78d46a84664fe7ef709eed4f7621f7a25/irish-counties-segmentized.topojson",
+                "format": {"type": "topojson", "feature": "counties"}
+              },
+              "mark": {"type": "geoshape", "stroke": "white", "fill": "#ddd"}
+            },
+            {
+              "data": {
+                "url": "https://raw.githubusercontent.com/colmr/vis_class/master/FakeAccomodationDetails.csv",
+                "format": {"type": "csv"}
+              },
+              "selection": {
+                "spt": {
+                  "type": "multi",
+                  "on": "click",
+                  "fields": ["Type"],
+                  "bind": "legend"
+                }
+              },
+              "transform": [
+                {"calculate": "datum.Url", "as": "url"},
+                {"filter": {"selection": "spt1"}},
+                {"filter": {"selection": "spt2"}}
+              ],
+              "mark": "circle",
+              "encoding": {
+                "longitude": {"field": "Longitude", "type": "quantitative"},
+                "latitude": {"field": "Latitude", "type": "quantitative"},
+                "color": {
+                  "field": "Type",
+                  "scale": {
+                    "domain": [
+                      "Hotel",
+                      "B & B",
+                      "Camping",
+                      "Self Catering",
+                      "Hostel"
+                    ],
+                    "range": [
+                      "#3C8169",
+                      "#D68A1D",
+                      "#1160CD",
+                      "#4AA0CF",
+                      "#D65EAF"
+                    ]
+                  },
+                  "legend": {"titleFontSize": 14, "labelFontSize": 14}
+                },
+                "tooltip": [
+                  {"field": "Name", "type": "nominal"},
+                  {"field": "Type", "type": "nominal"},
+                  {"field": "Telephone", "type": "nominal"}
+                ],
+                "href": {"field": "url", "type": "nominal"},
+                "opacity": {
+                  "condition": {"selection": "spt", "value": 1},
+                  "value": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "width": 300,
+          "height": 600,
+          "data": {
+            "url": "https://raw.githubusercontent.com/colmr/vis_class/master/FakeAccomodationDetails.csv",
+            "format": {"type": "csv"}
+          },
+          "selection": {
+            "spt1": {
+              "type": "multi",
+              "on": "click",
+              "fields": ["AddressRegion"]
+            }
+          },
+          "transform": [
+            {"filter": {"selection": "spt"}},
+            {"filter": {"selection": "spt2"}}
+          ],
+          "mark": {"type": "bar"},
+          "encoding": {
+            "y": {
+              "field": "AddressRegion",
+              "title": null,
+              "sort": "-x",
+              "axis": {"labelFontSize": 14, "titleFontSize": 15}
+            },
+            "x": {
+              "aggregate": "count",
+              "title": "Total Accommodations",
+              "axis": {"labelFontSize": 14, "titleFontSize": 14}
+            },
+            "color": {"field": "Type"},
+            "order": {
+              "aggregate": "count",
+              "field": "Type",
+              "sort": "descending"
+            },
+            "opacity": {
+              "condition": {"selection": "spt1", "value": 1},
+              "value": 0.3
+            }
+          }
+        }
+      ]
+    },
+    {
+      "layer": [
+        {
+          "data": {
+            "url": "https://raw.githubusercontent.com/colmr/vis_class/master/FakeAccomodationDetails.csv",
+            "format": {"type": "csv"}
+          },
+          "width": 900,
+          "height": 40,
+          "selection": {"spt2": {"type": "interval", "encodings": ["x"]}},
+          "transform": [
+            {"filter": {"selection": "spt1"}},
+            {"filter": {"selection": "spt"}}
+          ],
+          "mark": "tick",
+          "encoding": {
+            "x": {
+              "field": "Capacity",
+              "type": "quantitative",
+              "scale": {"domain": [0, 400], "nice": false},
+              "axis": {"labelFontSize": 14, "titleFontSize": 15}
+            },
+            "color": {"field": "Type"},
+            "opacity": {
+              "condition": [{"selection": "spt2", "value": 1}],
+              "value": 0.1
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "config": {"legend": {"orient": "top-left", "symbolLimit": 6}}
+}
